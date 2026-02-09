@@ -66,10 +66,10 @@ func (c *OpenSearchConnection) Open() {
 
 	cfg := opensearch.Config{
 		Addresses:            addresses,
-		Transport:           c.transport,
-		CompressRequestBody: !c.Config.Debug,
-		MaxRetries:          3,
-		RetryOnStatus:       []int{502, 503, 504},
+		Transport:            c.transport,
+		CompressRequestBody:  !c.Config.Debug,
+		MaxRetries:           3,
+		RetryOnStatus:        []int{502, 503, 504},
 		EnableRetryOnTimeout: true,
 	}
 

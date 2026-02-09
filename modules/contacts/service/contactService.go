@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"sync"
+
 	"vivek-ray/connections"
 	"vivek-ray/constants"
 	"vivek-ray/models"
@@ -43,7 +44,7 @@ func (s *ContactService) ListByFilters(query utilities.VQLQuery) ([]helper.Conta
 		return nil, err
 	}
 	contactResponses, contactUuids, companyIds := make([]helper.ContactResponse, 0), make([]string, 0), make([]string, 0)
-	cursors := make(map[string][]string)
+	cursors := make(map[string][]any)
 	for _, osHit := range osHits {
 		contactUuids = append(contactUuids, osHit.Contact.UUID)
 		cursors[osHit.Contact.UUID] = osHit.Cursor
@@ -118,8 +119,8 @@ func (s *ContactService) CountByFilters(query utilities.VQLQuery) (int64, error)
 }
 
 func (s *ContactService) BulkUpsertToDb(pgContacts []*models.PgContact,
-	osContacts []*models.OpenSearchContact, filtersData []*models.ModelFilterData) error {
-
+	osContacts []*models.OpenSearchContact, filtersData []*models.ModelFilterData,
+) error {
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 	var insertionError error

@@ -12,7 +12,7 @@ type OpenSearchContact struct {
 	UUID string `json:"uuid"`
 
 	FirstName   string   `json:"first_name"`  // text search
-	LastName    string   `json:"last_name"`  // text search
+	LastName    string   `json:"last_name"`   // text search
 	CompanyID   string   `json:"company_id"`  // keyword search
 	Email       string   `json:"email"`       // keyword search
 	Title       string   `json:"title"`       // text search
@@ -27,18 +27,18 @@ type OpenSearchContact struct {
 	LinkedinURL string `json:"linkedin_url"` // text search
 
 	// company details
-	CompanyName             string   `json:"company_name"`               // text search
+	CompanyName             string   `json:"company_name"`              // text search
 	CompanyEmployeesCount   int64    `json:"company_employees_count"`   // number search
-	CompanyIndustries       []string `json:"company_industries"`         // keyword search
+	CompanyIndustries       []string `json:"company_industries"`        // keyword search
 	CompanyKeywords         []string `json:"company_keywords"`          // keyword search
-	CompanyAddress          string   `json:"company_address"`            // text search
-	CompanyAnnualRevenue    int64    `json:"company_annual_revenue"`      // number search
-	CompanyTotalFunding     int64    `json:"company_total_funding"`      // number search
-	CompanyTechnologies     []string `json:"company_technologies"`       // keyword search
-	CompanyCity             string   `json:"company_city"`               // text search
-	CompanyState            string   `json:"company_state"`               // text search
-	CompanyCountry          string   `json:"company_country"`            // text search
-	CompanyLinkedinURL      string   `json:"company_linkedin_url"`       // text search
+	CompanyAddress          string   `json:"company_address"`           // text search
+	CompanyAnnualRevenue    int64    `json:"company_annual_revenue"`    // number search
+	CompanyTotalFunding     int64    `json:"company_total_funding"`     // number search
+	CompanyTechnologies     []string `json:"company_technologies"`      // keyword search
+	CompanyCity             string   `json:"company_city"`              // text search
+	CompanyState            string   `json:"company_state"`             // text search
+	CompanyCountry          string   `json:"company_country"`           // text search
+	CompanyLinkedinURL      string   `json:"company_linkedin_url"`      // text search
 	CompanyWebsite          string   `json:"company_website"`           // text search
 	CompanyNormalizedDomain string   `json:"company_normalized_domain"` // text search
 
@@ -85,7 +85,7 @@ func OpenSearchContactFromRawData(contact *PgContact, company *PgCompany) *OpenS
 
 type OpenSearchContactSearchHit struct {
 	Contact OpenSearchContact `json:"_source"`
-	Cursor  []string          `json:"sort,omitempty"`
+	Cursor  []any             `json:"sort,omitempty"`
 }
 
 type OpenSearchContactSearchResponse struct {
