@@ -1,32 +1,28 @@
-# syntax=docker/dockerfile:1
-FROM golang:1.24-alpine AS tisvc
+FROM golang:1.24-alpine AS builder
 
-# Install git in the build stage
-RUN apk add --no-cache git build-base libxml2-dev libxslt-dev
+WORKDIR /app
 
-WORKDIR /opt/app
-
-# Copy go.mod and go.sum first for better caching
+# Install dependencies first for caching
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy the rest of the source code
+# Copy source code and build
 COPY . .
-RUN touch .env
-RUN go build -o connectra .
+RUN go build -o connectra main.go
 
-# Build from alpine
-FROM alpine:3.16
-RUN apk add --no-cache bash bash-doc bash-completion openssl git libxml2 libxslt
-WORKDIR /opt/app
+# Final stage: minimal runtime image
+FROM alpine:latest
 
+WORKDIR /app
 
+# Copy binary from builder
+COPY --from=builder /app/connectra .
 
-ENV RUN_COMMAND=help
-RUN touch .env
-RUN mkdir data
-RUN echo ${RUN_COMMAND}
+# Copy .env file (Required by conf/viper.go)
+COPY .env .
 
-COPY --from=tisvc /opt/app/connectra /opt/app/connectra
+# Expose the internal port
+EXPOSE 8000
 
-CMD ["sh", "-c", "./connectra $RUN_COMMAND"]
+# Default entrypoint
+ENTRYPOINT ["./connectra"]
